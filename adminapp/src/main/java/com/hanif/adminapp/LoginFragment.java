@@ -79,9 +79,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 public void onResponse(Call<Result> call, Response<Result> response) {
                     String message = response.body().getMessage();
                     String value = response.body().getValue();
+                    String idLevel = response.body().getIdLevel();
 
-                    if (value.equals("1")) {
+                    if (value.equals("0")) {
                         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    } else if (idLevel.equals("3")){
+                        Toast.makeText(getActivity(), "Anda bukan admin", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                     }

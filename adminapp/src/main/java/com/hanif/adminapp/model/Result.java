@@ -9,6 +9,9 @@ public class Result {
     @SerializedName("message")
     String message;
 
+    @SerializedName("id_level")
+    String idLevel;
+
 //    @SerializedName("result")
 //    List<Auction> result;
 
@@ -26,5 +29,13 @@ public class Result {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getIdLevel() {
+        return idLevel;
+    }
+
+    public void setIdLevel(String idLevel) {
+        this.idLevel = idLevel;
     }
 }

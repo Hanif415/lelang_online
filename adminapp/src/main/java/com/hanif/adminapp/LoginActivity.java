@@ -1,17 +1,12 @@
 package com.hanif.adminapp;
 
-
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,42 +22,34 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final String URL = "http://192.168.43.253:8000/api/v1/";
 
     EditText edtUsername;
     EditText edtPassword;
-    Button btn_signin;
+    Button btn_login;
 
-    public LoginFragment() {
-        // Required empty public constructor
-    }
-
+    private ProgressDialog progress;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_signin, container, false);
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-
-        edtUsername = view.findViewById(R.id.edt_username);
-        edtPassword = view.findViewById(R.id.edt_password);
-        btn_signin = view.findViewById(R.id.btn_signin);
-        btn_signin.setOnClickListener(this);
+        edtUsername = findViewById(R.id.edt_username);
+        edtPassword = findViewById(R.id.edt_password);
+        btn_login = findViewById(R.id.btn_signin);
+        btn_login.setOnClickListener(this);
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(final View view) {
+
+        progress = new ProgressDialog(this);
+        progress.setCancelable(false);
+        progress.setMessage("Loading...");
+        progress.show();
 
         String username = edtUsername.getText().toString();
         String password = edtPassword.getText().toString();
@@ -77,16 +64,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             call.enqueue(new Callback<Result>() {
                 @Override
                 public void onResponse(Call<Result> call, Response<Result> response) {
+                    progress.dismiss();
+
                     String message = response.body().getMessage();
                     String value = response.body().getValue();
                     String idLevel = response.body().getIdLevel();
 
                     if (value.equals("0")) {
-                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
                     } else if (idLevel.equals("3")){
-                        Toast.makeText(getActivity(), "Anda bukan admin", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Anda bukan admin", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
                     }
                 }
 

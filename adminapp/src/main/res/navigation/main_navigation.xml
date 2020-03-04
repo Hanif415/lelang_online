@@ -3,10 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/dashboardFragment">
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.hanif.adminapp.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_signin" />
+        android:id="@+id/dashboardFragment"
+        android:name="com.hanif.adminapp.DashboardFragment"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_detailStuffFragment"
+            app:destination="@id/detailStuffFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailStuffFragment"
+        android:name="com.hanif.adminapp.DetailStuffFragment"
+        android:label="fragment_detail_stuff"
+        tools:layout="@layout/fragment_detail_stuff" />
 </navigation>
